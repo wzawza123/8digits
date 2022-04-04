@@ -1,7 +1,7 @@
 '''
 Description: use the bfs to solve the 8 puzzle problem
 Date: 2022-04-04 18:55:34
-LastEditTime: 2022-04-04 22:44:28
+LastEditTime: 2022-04-04 23:00:59
 '''
 import random
 import queue
@@ -57,6 +57,7 @@ class Tree:
         self.x=x
         self.y=y
         self.leaf_list=[[] for i in range(TREE_MAX_LAYER+1)]
+        self.max_layer=0
     #use the bfs to initialize the leaf list of every layer
     def init_leaf_list(self):
         q=queue.Queue()
@@ -64,11 +65,15 @@ class Tree:
         while not q.empty():
             node=q.get()
             if node.get_step()<TREE_MAX_LAYER:
-                node.set_position(self.x+TREE_NODE_DISTANCE*len(self.leaf_list[node.get_step()]),self.y+TREE_LAYER_DISTANCE*node.get_step())
                 self.leaf_list[node.get_step()].append(node)
-                pass
+                self.max_layer=max(self.max_layer,node.get_step())
             for child in node.get_children():
                 q.put(child)
+    #use the data in leafe list to set the node position
+    def generate_node_position(self,mode=0):
+        for i in range(len(self.leaf_list)):
+            for j in range(len(self.leaf_list[i])):
+                self.leaf_list[i][j].set_position(self.x+TREE_NODE_DISTANCE*j,self.y+TREE_LAYER_DISTANCE*i)
     #draw the tree
     def draw_tree(self,screen):
         #draw the node
@@ -138,6 +143,7 @@ def main():
     bfs_travel(root)
     searching_tree=Tree(root,50,50)
     searching_tree.init_leaf_list()
+    searching_tree.generate_node_position()
     #init pygame window
     pygame.init()
     screen=pygame.display.set_mode((1280,840))
@@ -150,39 +156,12 @@ def main():
             if event.type==pygame.QUIT:
                 isRunning=False
         #draw the background
-        screen.fill((0,0,0))
+        screen.fill((64,64,64))
         searching_tree.draw_tree(screen)
         # root.display(screen)
         pygame.display.update()
     pygame.quit()
 
-def vis_test():
-    isRunning=True
-    start_state=[1,2,3,4,5,6,7,8,0]
-    end_state=[1,2,3,4,0,5,7,8,6]
-    # root=bfs_search_solution(start_state,end_state)
-    root=TreeNode(start_state,None)
-    root.add_child(TreeNode([1,2,3,0,5,6,7,8,4],root))
-    #init pygame window
-    pygame.init()
-    screen=pygame.display.set_mode((640,840))
-    pygame.display.set_caption("8 puzzle searching tree")
-    flag=False
-    #main loop
-    while isRunning:
-        #process the events
-        for event in pygame.event.get():
-            if event.type==pygame.QUIT:
-                isRunning=False
-        if flag:
-            continue
-        else:
-            flag=True
-        #draw the background
-        screen.fill((128,16,16))
-        #draw treeNode
-        root.display(screen)
-        pygame.display.update()
 if __name__ == '__main__':
     main()
     # vis_test()
