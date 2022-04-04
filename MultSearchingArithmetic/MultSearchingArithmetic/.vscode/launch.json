@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+  {"name":"Python: 当前文件","type":"python","request":"launch","program":"${file}","console":"integratedTerminal","justMyCode":true},
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "c:/Users/86180/OneDrive/桌面/人工智能概论/MultSearchingArithmetic",
+      "environment": [],
+      "program": "c:/Users/86180/OneDrive/桌面/人工智能概论/MultSearchingArithmetic/build/Debug/outDebug",
+      "internalConsoleOptions": "openOnSessionStart",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "externalConsole": false,
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+DFS: average iterations: 94295.9  average steps: 50340.0  average time consumed: 17.138290095329285

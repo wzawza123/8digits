@@ -1,0 +1,1 @@
+BFS: average iterations: 202352.57  average steps: 24.395  average time consumed: 2.932504312992096  tot_steps: 4879
