@@ -33,6 +33,7 @@ SELECTED_COLOR=(0,255,0)
 UNSELECTED_COLOR=(255,0,0)
 GRADIENT_START_COLOR=(0x30,0xCF,0xD0)
 GRADIENT_END_COLOR=(0x66,0X0F,0XDF)
+BRANCH_COLOR=(0,255,0)
 # GRADIENT_START_COLOR=(0xFA,0x70,0x9A)
 # GRADIENT_END_COLOR=(0xFE,0XE1,0X40)
 # GRADIENT_START_COLOR=(0xA6,0xC0,0xFE)
@@ -47,6 +48,7 @@ class Block:
         self.size=size
         self.font_ratio=font_ratio
     def display(self, screen):
+        # print("drawing at "+str(self.x)+","+str(self.y))
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size))
         if(self.number!=0):
             font = pygame.font.SysFont('Arial', int(self.font_ratio*self.size))
@@ -81,8 +83,8 @@ class Button:
         self.color = color
 #create the board object to contain the block
 class Board:
-    block_list=[]
     def __init__(self, x, y,size=BLOCK_SIZE, color=BOARD_BG_COLOR,state=[1,2,3,4,5,6,7,8,0]):
+        self.block_list=[]
         self.x = x
         self.y = y
         self.size = size
@@ -103,6 +105,26 @@ class Board:
     def updateState(self, state):
         self.state=state
         arrange_block(self.block_list, self.state,self.x,self.y,self.size)
+    #set the postion
+    def setPosition(self, x, y):
+        self.x=x
+        self.y=y
+        arrange_block(self.block_list, self.state,self.x,self.y,self.size)
+    #get the position
+    def getPosition(self):
+        return self.x,self.y
+    #get the width
+    def getWidth(self):
+        return self.size*3+self.size*4//PADDING_FRACTION
+    #get the height
+    def getHeight(self):
+        return self.size*3+self.size*4//PADDING_FRACTION
+    #get the middle of the bottom
+    def getBottomMiddle(self):
+        return self.x+self.getWidth()/2,self.y+self.getHeight()
+    #get the middle of the top
+    def getTopMiddle(self):
+        return self.x+self.getWidth()/2,self.y
         
 class TextView:
     def __init__(self, x, y, text,size, color=(0,0,0)):
@@ -209,12 +231,16 @@ def main_board():
                 isRunning = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 random.shuffle(cur_state)
+                #set random position
+                board.setPosition(random.randint(0,WINDOW_WIDTH-board.size),random.randint(0,WINDOW_HEIGHT-board.size))
                 board.updateState(cur_state)
+            
         #draw background
         screen.fill((0,0,0))
         
         board.display(screen)
         pygame.display.update()
+    pygame.quit()
 
 if __name__ == "__main__":
     main_board()
