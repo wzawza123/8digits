@@ -41,6 +41,7 @@ BRANCH_COLOR_CRITICAL=(255,0,0)
 # GRADIENT_END_COLOR=(0xFE,0XE1,0X40)
 # GRADIENT_START_COLOR=(0xA6,0xC0,0xFE)
 # GRADIENT_END_COLOR=(0xF6,0X80,0X84)
+pygame.init()
 #block object
 class Block:
     def __init__(self, x, y, number, color,size=BLOCK_SIZE,font_ratio=0.5):
@@ -93,7 +94,10 @@ class Board:
         self.size = size
         self.color = color
         self.state=state
+        self.fx=0
+        self.fxFlag=False
         self.block_list.append(Block(0,0,0,SPACE_BLOCK_COLOR,self.size))
+        self.fx_textview=TextView(self.x+self.getWidth()+BLOCK_SIZE//PADDING_FRACTION,self.y,str(self.fx),self.size//2,(255,255,255))
         for i in range(1,9):
             self.block_list.append(Block(x+PADDING+i%3*(size+PADDING), y+PADDING+i//3*(size+PADDING), i, gradient_color_generator(GRADIENT_START_COLOR,GRADIENT_END_COLOR, i),self.size))
         arrange_block(self.block_list, self.state,self.x,self.y,self.size)
@@ -104,6 +108,9 @@ class Board:
         #display the blocks
         for block in self.block_list:
             block.display(screen)
+        #display the textview
+        if self.fxFlag:
+            self.fx_textview.display(screen)
     #update the state
     def updateState(self, state):
         self.state=state
@@ -113,6 +120,7 @@ class Board:
         self.x=x
         self.y=y
         arrange_block(self.block_list, self.state,self.x,self.y,self.size)
+        self.fx_textview.setPosition(self.x+self.getWidth()+BLOCK_SIZE//PADDING_FRACTION,self.y)
     #get the position
     def getPosition(self):
         return self.x,self.y
@@ -128,6 +136,11 @@ class Board:
     #get the middle of the top
     def getTopMiddle(self):
         return self.x+self.getWidth()/2,self.y
+    #set the fx and update fx flag
+    def setFx(self, fx):
+        self.fx=fx
+        self.fxFlag=True
+        self.fx_textview.setText(str(self.fx))
         
 class TextView:
     def __init__(self, x, y, text,size, color=(0,0,0)):

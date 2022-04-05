@@ -340,7 +340,7 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.put((cur[1],nxt_state,new_node))
@@ -378,7 +378,6 @@ class Solution:
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.put((cur[1],nxt_state,new_node))
         end_time = time.time()
-        self.back
         return iter ,(end_time - start_time),Tracklist,root
     
     def DFS(self,Display = False):
@@ -474,10 +473,13 @@ class Solution:
             state[i] = self.Restore_dict[ReflectState[i]]
         return state
 
-    def Display(self,root):
+    def Display(self,root:TreeNode):
+        #test whether root is a TreeNode
+        assert isinstance(root,TreeNode)
         searching_tree=Tree(root,50,50)
         searching_tree.init_leaf_list()
         searching_tree.generate_node_position()
+        searching_tree.generate_critical(self.Goal_state)
         #init pygame window
         pygame.init()
         screen=pygame.display.set_mode((1280,840))
@@ -522,3 +524,18 @@ class Solution:
     
     
 # main()
+def main():
+    start = [1,2,3,4,6,8,7,0,5]
+    end = [1,2,3,4,5,6,7,8,0]
+    Tracklist = []
+    a = Solution(start,end)
+    if(a.Resolvable(start,end)):
+        iternum,cost,Tracklist,root = a.Astar(a.Manhattan)
+        print('A* Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
+        a.Display(root)
+    else:
+        print('no solution')
+    return
+
+if __name__ == '__main__':
+    main()

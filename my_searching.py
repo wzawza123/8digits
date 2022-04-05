@@ -1,7 +1,7 @@
 '''
 Description: use the bfs to solve the 8 puzzle problem
 Date: 2022-04-04 18:55:34
-LastEditTime: 2022-04-05 14:36:36
+LastEditTime: 2022-04-05 15:12:51
 '''
 import random
 import queue
@@ -21,6 +21,8 @@ valid_move={0:[1,3],1:[0,2,4],2:[1,5],3:[0,4,6],4:[1,3,5,7],5:[2,4,8],6:[3,7],7:
 class TreeNode:
     def __init__(self,state,parent):
         self.state=state
+        if parent is not None:
+            assert isinstance(parent,TreeNode)
         self.parent=parent
         self.step=0
         self.board=Board(0,0,TREE_BOARD_SIZE,BOARD_BG_COLOR,state)
@@ -57,6 +59,10 @@ class TreeNode:
         self.isCritical=True
     def is_critical(self):
         return self.isCritical
+    def get_fx(self):
+        return self.fx
+    def set_fx(self,value):
+        self.board.setFx(value)
     
 class Tree:
     def __init__(self,root,x=0,y=0):
@@ -77,7 +83,7 @@ class Tree:
             for child in node.get_children():
                 q.put(child)
     #use the data in leafe list to set the node position
-    def generate_node_position(self,mode=0):
+    def generate_node_position(self):
         for i in range(len(self.leaf_list)):
             for j in range(len(self.leaf_list[i])):
                 self.leaf_list[i][j].set_position(self.x+TREE_NODE_DISTANCE*j,self.y+TREE_LAYER_DISTANCE*i)
@@ -96,7 +102,7 @@ class Tree:
                     else:
                         pygame.draw.line(screen,BRANCH_COLOR_NOT_CRITICAL,self.leaf_list[i][j].get_middle_bottom(),child.get_middle_up(),BRANCH_WEIGHT)
     #bfs find the solution leaf, back track the path and set as critical node
-    def generate_critical(self,end_state):
+    def generate_critical(self,end_state:list[int]):
         q=queue.Queue()
         q.put(self.root)
         while not q.empty():
@@ -107,9 +113,10 @@ class Tree:
             for child in node.get_children():
                 q.put(child)
     #back track and set the path as cirtical
-    def track_critical(self,node):
+    def track_critical(self,node:TreeNode):
+        assert isinstance(node,TreeNode)
         while node.get_parent()!=None:
-            # print("critical:",node.get_state())
+            # assert isinstance(node.get_parent(),TreeNode)
             node.set_critical()
             node=node.get_parent()
 #transform the state list into integer
