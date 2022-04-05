@@ -22,4 +22,11 @@ https://towardsdatascience.com/accelerate-your-training-and-inference-running-on
 
 ## 抽取数据缺乏代表性
 
-## 
+抽样300次最优解步数
+
+![image-20220405100953579](note.assets/image-20220405100953579.png)
+
+![image-20220405103227758](note.assets/image-20220405103227758.png)
+
+![image-20220405103238598](note.assets/image-20220405103238598.png)
+
