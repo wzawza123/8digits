@@ -1,7 +1,7 @@
 '''
 Description: use the bfs to solve the 8 puzzle problem
 Date: 2022-04-04 18:55:34
-LastEditTime: 2022-04-04 23:00:59
+LastEditTime: 2022-04-05 14:36:36
 '''
 import random
 import queue
@@ -25,6 +25,7 @@ class TreeNode:
         self.step=0
         self.board=Board(0,0,TREE_BOARD_SIZE,BOARD_BG_COLOR,state)
         self.children=[]
+        self.isCritical=False
     def display(self,screen):
         self.board.display(screen)
     def add_child(self,child):
@@ -44,12 +45,18 @@ class TreeNode:
         return self.board.getBottomMiddle()
     def get_children(self):
         return self.children
+    def set_parent(self):
+        return self.parent
     def get_parent(self):
         return self.parent
     def get_state(self):
         return self.state
     def get_step(self):
         return self.step
+    def set_critical(self):
+        self.isCritical=True
+    def is_critical(self):
+        return self.isCritical
     
 class Tree:
     def __init__(self,root,x=0,y=0):
@@ -84,7 +91,27 @@ class Tree:
         for i in range(len(self.leaf_list)-1):
             for j in range(len(self.leaf_list[i])):
                 for child in self.leaf_list[i][j].get_children():
-                    pygame.draw.line(screen,BRANCH_COLOR,self.leaf_list[i][j].get_middle_bottom(),child.get_middle_up())
+                    if child.is_critical():
+                        pygame.draw.line(screen,BRANCH_COLOR_CRITICAL,self.leaf_list[i][j].get_middle_bottom(),child.get_middle_up(),BRANCH_WEIGHT)
+                    else:
+                        pygame.draw.line(screen,BRANCH_COLOR_NOT_CRITICAL,self.leaf_list[i][j].get_middle_bottom(),child.get_middle_up(),BRANCH_WEIGHT)
+    #bfs find the solution leaf, back track the path and set as critical node
+    def generate_critical(self,end_state):
+        q=queue.Queue()
+        q.put(self.root)
+        while not q.empty():
+            node=q.get()
+            if node.get_state()==end_state:
+                self.track_critical(node)
+                break
+            for child in node.get_children():
+                q.put(child)
+    #back track and set the path as cirtical
+    def track_critical(self,node):
+        while node.get_parent()!=None:
+            # print("critical:",node.get_state())
+            node.set_critical()
+            node=node.get_parent()
 #transform the state list into integer
 def state_list_to_integer(state_list):
     ans=0
@@ -144,6 +171,7 @@ def main():
     searching_tree=Tree(root,50,50)
     searching_tree.init_leaf_list()
     searching_tree.generate_node_position()
+    searching_tree.generate_critical(end_state)
     #init pygame window
     pygame.init()
     screen=pygame.display.set_mode((1280,840))

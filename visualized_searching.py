@@ -208,6 +208,7 @@ class Solution:
                     new_node.set_fx(hn+fn)
                     open_list.put((fn+hn,(q[1][1], nxt_state, fn,new_node)))
         end_time=time.time()
+        
         return iter,(end_time-start_time),Tracklist,root
 
     def Greedy(self,Display = False):
@@ -377,7 +378,7 @@ class Solution:
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.put((cur[1],nxt_state,new_node))
         end_time = time.time()
-
+        self.back
         return iter ,(end_time - start_time),Tracklist,root
     
     def DFS(self,Display = False):
@@ -494,7 +495,11 @@ class Solution:
             # root.display(screen)
             pygame.display.update()
         pygame.quit()
-
+    #backtrack the treenode from the solution leaf, to marke the path as critical
+    def BackTrackingTree(self,cur,root):
+        while(cur!=root):
+            cur.set_critical()
+            cur = cur.get_parent()
 
 # def main():
 #     start = [1,2,3,8,4,5,7,6,0]
