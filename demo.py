@@ -15,8 +15,8 @@ def visualization_main():
     end_states = [1,2,3,4,5,6,7,8,0]
     
     # input states
-    # start_states=input_number_list(prompt="Input initial states: ")
-    # end_states=input_number_list(prompt="Input end states: ")
+    start_states=input_number_list(prompt="Input initial states: ")
+    end_states=input_number_list(prompt="Input end states: ")
     print("start with")
     print(start_states)
     print("end with")

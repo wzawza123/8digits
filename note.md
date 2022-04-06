@@ -30,3 +30,16 @@ https://towardsdatascience.com/accelerate-your-training-and-inference-running-on
 
 ![image-20220405103238598](note.assets/image-20220405103238598.png)
 
+![image-20220406214152775](note.assets/image-20220406214152775.png)
+
+错误状态，iteration和step
+
+![image-20220406234854005](note.assets/image-20220406234854005.png)
+
+
+
+用的神经网络
+
+![image-20220407001436447](note.assets/image-20220407001436447.png)
+
+![image-20220407002634414](note.assets/image-20220407002634414.png)
