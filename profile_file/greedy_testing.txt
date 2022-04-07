@@ -1,1 +1,1 @@
-Greedy: average iterations: 182617.81  average steps: 24.75  average time consumed: 2.7479917669296263
+Greedy: average iterations: 155266.96666666667  average steps: 22.506666666666668  average time consumed: 1.240154635111491

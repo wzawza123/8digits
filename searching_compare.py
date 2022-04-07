@@ -220,7 +220,7 @@ def fixed_end_compare(test_times=300):
     # data_list=a_star_network_testing(test_times)
     # data_list=greedy_testing(test_times)
     # data_list=a_star_wrong_tiles(test_times)
-    generate_profile_data(test_times,"BFS")
+    generate_profile_data(test_times,"A_star_manhattan")
     # dfs_testing(10)
 
 def main():

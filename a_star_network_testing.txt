@@ -1,1 +1,0 @@
-A*_network: average iterations: 281.14666666666665  average steps: 22.94  average time consumed: 0.38141839265823363

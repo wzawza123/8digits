@@ -1,3 +1,8 @@
+'''
+Description: random select the data for training
+Date: 2022-04-04 21:02:18
+LastEditTime: 2022-04-07 21:32:25
+'''
 #this program can random select some lines in the file, and write them into a new file
 import random
 import numpy as np
@@ -14,7 +19,7 @@ def random_select(file_name,output_file_name,ratio=0.1):
     f.close()
     f_out.close()
 
-#small steps are more likely to be selected
+#states with small steps are more likely to be selected
 def random_select_enhanced(file_name,output_file_name,ratio=0.1):
     f=open(file_name,'r')
     f_out=open(output_file_name,'w')

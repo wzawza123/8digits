@@ -1,1 +1,1 @@
-A*_manhattan: average iterations: 1967.77  average steps: 24.395  average time consumed: 0.06070289254188538  tot steps: 4879
+A*_manhattan: average iterations: 1717.1566666666668  average steps: 22.506666666666668  average time consumed: 0.02005655845006307  tot steps: 6752

@@ -1,1 +1,0 @@
-A*_wrong_tiles: average iterations: 21391.3  average steps: 22.506666666666668  average time consumed: 0.18716028531392415
