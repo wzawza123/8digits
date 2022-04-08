@@ -5,6 +5,7 @@ from queue import Queue
 import time
 from searching_tree import Tree, TreeNode
 from visualization import *
+import os
 
 class Solution:
     #空状态
@@ -502,13 +503,17 @@ class Solution:
         searching_tree=Tree(root,50,50)
         searching_tree.init_leaf_list()
         searching_tree.generate_node_position()
+        searching_tree.generate_critical(self.Goal_state)
         #init pygame window
         pygame.init()
+        os.environ['SDL_VIDEO_CENTERED'] = '1'
         screen=pygame.display.set_mode((1280,840))
         pygame.display.set_caption("8 puzzle searching tree")
         isRunning=True
+        fpsclock=pygame.time.Clock()
         #main loop
         while isRunning:
+            fpsclock.tick(50)
             #process the events
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
@@ -518,7 +523,8 @@ class Solution:
             searching_tree.draw_tree(screen)
             # root.display(screen)
             pygame.display.update()
-        pygame.quit()
+        screen=pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
+        return
 
 
 def main():

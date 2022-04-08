@@ -4,7 +4,7 @@ import random
 import math
 #size definitions
 GAME_SIZE=3
-BLOCK_SIZE = 80
+BLOCK_SIZE = 100
 PADDING_FRACTION=16
 PADDING=BLOCK_SIZE//PADDING_FRACTION
 BUTTON_HEIGHT=40
@@ -18,12 +18,13 @@ BUTTON_1_Y=15
 BUTTON_2_Y=BUTTON_1_Y+BUTTON_HEIGHT+PADDING
 BUTTON_3_Y=BUTTON_2_Y+BUTTON_HEIGHT+PADDING
 BUTTON_4_Y=BUTTON_3_Y+BUTTON_HEIGHT+PADDING
+BUTTON_5_Y=BUTTON_4_Y+BUTTON_HEIGHT+PADDING
 
 BUTTON_1_X=MIDDLE_EDGE+(WINDOW_WIDTH-MIDDLE_EDGE-BUTTON_WIDTH*2-PADDING)/2
 BUTTON_2_X=BUTTON_1_X+BUTTON_WIDTH+PADDING
 
 TEXT_VIEW_X=MIDDLE_EDGE+50
-TEXT_VIEW_Y=WINDOW_HEIGHT-50-PADDING
+TEXT_VIEW_Y=WINDOW_HEIGHT-PADDING-50
 
 BRANCH_WEIGHT=2
 
@@ -136,6 +137,9 @@ class Board:
     #get the middle of the top
     def getTopMiddle(self):
         return self.x+self.getWidth()/2,self.y
+    #get the middle of the right
+    def getMiddleRight(self):
+        return self.x+self.getWidth(),self.y+self.getHeight()/2
     #set the fx and update fx flag
     def setFx(self, fx):
         self.fx=fx

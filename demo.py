@@ -9,19 +9,21 @@ def input_number_list(prompt):
     number_list = list(map(int, input().split(" ")))
     return number_list
 
+doneSearching=False
+
 #main function
 def visualization_main():
     #init states
     start_states = [0,1,2,3,4,5,6,7,8]
-    end_states = [1,2,3,4,5,6,7,8,0]
+    end_states = [0,8,7,6,5,4,3,2,1]
     
     # input states
-    # start_states=input_number_list(prompt="Input initial states: ")
-    # end_states=input_number_list(prompt="Input end states: ")
-    # print("start with")
-    # print(start_states)
-    # print("end with")
-    # print(end_states)
+    start_states=input_number_list(prompt="Input initial states: ")
+    end_states=input_number_list(prompt="Input end states: ")
+    print("start with")
+    print(start_states)
+    print("end with")
+    print(end_states)
     #init pygame window
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
@@ -38,6 +40,7 @@ def visualization_main():
     control_button_list = []
     control_button_list.append(Button(MIDDLE_EDGE+(WINDOW_WIDTH-MIDDLE_EDGE-BUTTON_WIDTH)/2,BUTTON_3_Y,BUTTON_WIDTH,BUTTON_HEIGHT,"solve",(255,0,0)))
     control_button_list.append(Button(MIDDLE_EDGE+(WINDOW_WIDTH-MIDDLE_EDGE-BUTTON_WIDTH)/2,BUTTON_4_Y,BUTTON_WIDTH,BUTTON_HEIGHT,"reset",(0,255,0)))
+    control_button_list.append(Button(MIDDLE_EDGE+(WINDOW_WIDTH-MIDDLE_EDGE-BUTTON_WIDTH)/2,BUTTON_5_Y,BUTTON_WIDTH,BUTTON_HEIGHT,"tree",(105,105,105)))
     #initilize the algorithm selection
     algorithm_selection_button_list=[]
     algorithm_selection_button_list.append(Button(BUTTON_1_X,BUTTON_1_Y,BUTTON_WIDTH,BUTTON_HEIGHT,"BFS",UNSELECTED_COLOR))
@@ -92,12 +95,17 @@ def visualization_main():
                             else:
                                 button.setText("solving")
                             text_view.setText("total generated:{},total expanded:{},total steps:{},time consumed:{:.1f}".format(iternum,expand_cnt,totStep,cost))
-                        if button.getText() == "reset":
+                            doneSearching=True
+                            find_button(control_button_list,"tree").setColor((0,255,0))
+                        elif button.getText() == "reset":
                             if isSolving:
                                 isSolving=False
                                 find_button(control_button_list,"solving").setText("solve")
                             current_states=start_states
                             board.updateState(current_states)
+                        elif button.getText() == "tree":
+                            if not isSolving and doneSearching:
+                                solClass.Display(root)
 
                     #process the algorithm selection buttons
                     for button in algorithm_selection_button_list:

@@ -1,20 +1,23 @@
 '''
 Description: use the bfs to solve the 8 puzzle problem
 Date: 2022-04-04 18:55:34
-LastEditTime: 2022-04-08 11:17:28
+LastEditTime: 2022-04-08 12:03:45
 '''
 import random
 import queue
+from turtle import window_width
 import numpy as np
 import pygame
 from visualization import *
 
 #define the tree node size
 TREE_BOARD_SIZE=20
+TREE_WIDTH=1280
+TREE_HEIGHT=840
 #define the max layer of the tree
 TREE_MAX_LAYER=33
 #define the layout parameters
-TREE_LAYER_DISTANCE=100
+TREE_LAYER_DISTANCE=150
 TREE_NODE_DISTANCE=100
 valid_move={0:[1,3],1:[0,2,4],2:[1,5],3:[0,4,6],4:[1,3,5,7],5:[2,4,8],6:[3,7],7:[4,6,8],8:[5,7]}
 
@@ -45,6 +48,8 @@ class TreeNode:
         return self.board.getTopMiddle()
     def get_middle_bottom(self):
         return self.board.getBottomMiddle()
+    def get_middle_right(self):
+        return self.board.getMiddleRight()
     def get_children(self):
         return self.children
     def set_parent(self):
@@ -88,19 +93,29 @@ class Tree:
             for j in range(len(self.leaf_list[i])):
                 self.leaf_list[i][j].set_position(self.x+TREE_NODE_DISTANCE*j,self.y+TREE_LAYER_DISTANCE*i)
     #draw the tree
-    def draw_tree(self,screen):
+    def draw_tree(self,screen,max_node=100):
+        node_cnt=0
         #draw the node
         for i in range(len(self.leaf_list)):
             for j in range(len(self.leaf_list[i])):
+                if self.leaf_list[i][j].get_middle_bottom()[1]>TREE_HEIGHT:
+                    # print(self.leaf_list[i][j].get_middle_bottom()[1],TREE_HEIGHT)
+                    continue
+                if self.leaf_list[i][j].get_middle_right()[0]>TREE_WIDTH:
+                    # print("w",self.leaf_list[i][j].get_middle_bottom()[1],TREE_HEIGHT)
+                    continue
+                #draw node
                 self.leaf_list[i][j].display(screen)
-        #draw the branch
-        for i in range(len(self.leaf_list)-1):
-            for j in range(len(self.leaf_list[i])):
-                for child in self.leaf_list[i][j].get_children():
-                    if child.is_critical():
-                        pygame.draw.line(screen,BRANCH_COLOR_CRITICAL,self.leaf_list[i][j].get_middle_bottom(),child.get_middle_up(),BRANCH_WEIGHT)
+                #draw branch
+                if self.leaf_list[i][j].parent is not None:
+                    if self.leaf_list[i][j].is_critical():
+                        pygame.draw.line(screen,BRANCH_COLOR_CRITICAL,self.leaf_list[i][j].parent.get_middle_bottom(),self.leaf_list[i][j].get_middle_up(),BRANCH_WEIGHT)
                     else:
-                        pygame.draw.line(screen,BRANCH_COLOR_NOT_CRITICAL,self.leaf_list[i][j].get_middle_bottom(),child.get_middle_up(),BRANCH_WEIGHT)
+                        pygame.draw.line(screen,BRANCH_COLOR_NOT_CRITICAL,self.leaf_list[i][j].parent.get_middle_bottom(),self.leaf_list[i][j].get_middle_up(),BRANCH_WEIGHT)
+                node_cnt+=1
+                if node_cnt>max_node:
+                    break
+                
     #bfs find the solution leaf, back track the path and set as critical node
     def generate_critical(self,end_state:list[int]):
         q=queue.Queue()
@@ -178,7 +193,7 @@ def tree_visualization(root,end_state):
     searching_tree.generate_critical(end_state)
     #init pygame window
     pygame.init()
-    screen=pygame.display.set_mode((1280,840))
+    screen=pygame.display.set_mode((TREE_WIDTH,TREE_HEIGHT))
     pygame.display.set_caption("8 puzzle searching tree")
     isRunning=True
     #main loop
