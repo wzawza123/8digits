@@ -43,3 +43,5 @@ https://towardsdatascience.com/accelerate-your-training-and-inference-running-on
 ![image-20220407001436447](note.assets/image-20220407001436447.png)
 
 ![image-20220407002634414](note.assets/image-20220407002634414.png)
+
+[1]许精明,阮越.基于量子衍生算法的8-puzzle问题分析[J].量子电子学报,2015,32(04):459-465.

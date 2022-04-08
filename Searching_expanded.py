@@ -1,4 +1,5 @@
-from operator import truediv
+
+
 from queue import PriorityQueue
 from queue import Queue
 import time
@@ -132,6 +133,8 @@ class Solution:
         open_list.put((0+hn,(self.null_state, start_state, 0,root)))
         #迭代次数
         iter = 0
+        #拓展节点数目
+        expandNum = 0
         while(True):
             iter = iter + 1
             # 如果优先队列已空，寻找失败
@@ -162,6 +165,7 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
+                    expandNum = expandNum + 1
                     new_node = TreeNode(self.Restore(nxt_state),q[1][3])
                     hn = self.heuristic(nxt_state,  goal_state,fun)
                     q[1][3].add_child(new_node)
@@ -175,6 +179,7 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
+                    expandNum = expandNum + 1
                     new_node = TreeNode(self.Restore(nxt_state),q[1][3])
                     hn = self.heuristic(nxt_state,  goal_state,fun)
                     q[1][3].add_child(new_node)
@@ -188,6 +193,7 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
+                    expandNum = expandNum + 1
                     new_node = TreeNode(self.Restore(nxt_state),q[1][3])
                     hn = self.heuristic(nxt_state,  goal_state,fun)
                     q[1][3].add_child(new_node)
@@ -201,6 +207,7 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
+                    expandNum = expandNum + 1
                     new_node = TreeNode(self.Restore(nxt_state),q[1][3])
                     hn = self.heuristic(nxt_state,  goal_state,fun)
                     q[1][3].add_child(new_node)
@@ -208,8 +215,7 @@ class Solution:
                     new_node.set_fx(hn+fn)
                     open_list.put((fn+hn,(q[1][1], nxt_state, fn,new_node)))
         end_time=time.time()
-        
-        return iter,(end_time-start_time),Tracklist,root
+        return iter,(end_time-start_time),Tracklist,root,expandNum
 
     def Greedy(self,Display = False):
         start_state = self.Reflct(self.Start_state)
@@ -228,6 +234,8 @@ class Solution:
         open_list.put((0,(self.null_state, start_state, 0, root)))
         #迭代次数
         iter = 0
+        #拓展节点数目
+        expandNum = 0
         while(True):
             iter = iter + 1
             # 如果优先队列已空，寻找失败
@@ -263,6 +271,7 @@ class Solution:
                     q[1][3].add_child(new_node)
                     new_node.set_step(q[1][3].get_step()+1)
                     open_list.put((fn,(q[1][1], nxt_state,fn,new_node)))
+                    expandNum = expandNum + 1
             if(cur_zero_pos + 3 < 9):
                 changepos = cur_zero_pos + 3
                 nxt_state = q[1][1][:]
@@ -274,6 +283,7 @@ class Solution:
                     q[1][3].add_child(new_node)
                     new_node.set_step(q[1][3].get_step()+1)
                     open_list.put((fn,(q[1][1], nxt_state,fn,new_node)))
+                    expandNum = expandNum + 1
             if((cur_zero_pos + 1) // 3 == cur_zero_pos // 3):
                 changepos = cur_zero_pos + 1
                 nxt_state = q[1][1][:]
@@ -285,6 +295,7 @@ class Solution:
                     q[1][3].add_child(new_node)
                     new_node.set_step(q[1][3].get_step()+1)
                     open_list.put((fn,(q[1][1], nxt_state,fn,new_node)))
+                    expandNum = expandNum + 1
             if((cur_zero_pos - 1) // 3 == cur_zero_pos // 3):
                 changepos = cur_zero_pos - 1
                 nxt_state = q[1][1][:]
@@ -296,8 +307,9 @@ class Solution:
                     q[1][3].add_child(new_node)
                     new_node.set_step(q[1][3].get_step()+1)
                     open_list.put((fn,(q[1][1], nxt_state,fn,new_node)))
+                    expandNum = expandNum + 1
         end_time=time.time()
-        return iter,(end_time-start_time),Tracklist,root
+        return iter,(end_time-start_time),Tracklist,root,expandNum
 
     def BFS(self,Display = False):
 
@@ -316,6 +328,8 @@ class Solution:
         close_list = {}
         open_list = Queue()
         open_list.put((self.null_state,start_state,root))
+
+        expandNum = 0
         while(True):
             iter = iter + 1
             if(open_list.empty()):
@@ -344,6 +358,7 @@ class Solution:
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.put((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
             if(cur_zero_pos + 3 < 9):
                 changepos = cur_zero_pos + 3
                 nxt_state = cur[1][:]
@@ -351,10 +366,11 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.put((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
             if((cur_zero_pos + 1) // 3 == cur_zero_pos // 3):
                 changepos = cur_zero_pos + 1
                 nxt_state = cur[1][:]
@@ -362,10 +378,11 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.put((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
             if((cur_zero_pos - 1) // 3 == cur_zero_pos // 3):
                 changepos = cur_zero_pos - 1
                 nxt_state = cur[1][:]
@@ -373,18 +390,22 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.put((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
         end_time = time.time()
-        return iter ,(end_time - start_time),Tracklist,root
+
+        return iter ,(end_time - start_time),Tracklist,root,expandNum
     
     def DFS(self,Display = False):
         start_state = self.Reflct(self.Start_state)
         goal_state = self.Reflct(self.Goal_state)
         start_time = time.time()
-        iter = 0;
+        iter = 0
+
+        expandNum = 0
 
         #initial the root node
         root = TreeNode(self.Restore(start_state),None)
@@ -419,10 +440,11 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)                
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.append((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
             if(cur_zero_pos + 3 < 9):
                 changepos = cur_zero_pos + 3
                 nxt_state = cur[1][:]
@@ -430,10 +452,11 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)                
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.append((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
             if((cur_zero_pos + 1) // 3 == cur_zero_pos // 3):
                 changepos = cur_zero_pos + 1
                 nxt_state = cur[1][:]
@@ -441,10 +464,11 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)                
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.append((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
             if((cur_zero_pos - 1) // 3 == cur_zero_pos // 3):
                 changepos = cur_zero_pos - 1
                 nxt_state = cur[1][:]
@@ -452,13 +476,14 @@ class Solution:
                 nxt_state[changepos] = 0
                 hash_value = self.hash(nxt_state)                
                 if(hash_value not in close_list):
-                    new_node = TreeNode(self.Restore(nxt_state),cur[0])
+                    new_node = TreeNode(self.Restore(nxt_state),cur[2])
                     cur[2].add_child(new_node)
                     new_node.set_step(cur[2].get_step()+1)
                     open_list.append((cur[1],nxt_state,new_node))
+                    expandNum = expandNum + 1
         end_time = time.time()
 
-        return iter ,(end_time - start_time),Tracklist,root
+        return iter ,(end_time - start_time),Tracklist,root,expandNum
 
     #正向与反向映射函数
     def Reflct(self,actullyGoal:list[int]):
@@ -473,13 +498,10 @@ class Solution:
             state[i] = self.Restore_dict[ReflectState[i]]
         return state
 
-    def Display(self,root:TreeNode):
-        #test whether root is a TreeNode
-        assert isinstance(root,TreeNode)
+    def Display(self,root):
         searching_tree=Tree(root,50,50)
         searching_tree.init_leaf_list()
         searching_tree.generate_node_position()
-        searching_tree.generate_critical(self.Goal_state)
         #init pygame window
         pygame.init()
         screen=pygame.display.set_mode((1280,840))
@@ -497,45 +519,38 @@ class Solution:
             # root.display(screen)
             pygame.display.update()
         pygame.quit()
-    #backtrack the treenode from the solution leaf, to marke the path as critical
-    def BackTrackingTree(self,cur,root):
-        while(cur!=root):
-            cur.set_critical()
-            cur = cur.get_parent()
 
-# def main():
-#     start = [1,2,3,8,4,5,7,6,0]
-#     end = [1,2,3,8,0,4,7,6,5]
-#     Tracklist = []
-#     a = Solution(start,end)
-#     if(a.Resolvable(start,end)):
-#         iternum,cost,Tracklist,root = a.Astar(a.Manhattan)
-#         print('A* Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
-#         iternum,cost,Tracklist,root=a.Greedy()
-#         print('Greedy Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
-#         iternum,cost,Tracklist,root,=a.BFS(Display= True)
-#         print('BFS Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
-#         iternum,cost,Tracklist,root=a.DFS()
-#         print('DFS Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
-#         a.Display(root)
-#     else:
-#         print('no solution')
-#     return
-    
-    
-# main()
+
 def main():
-    start = [1,2,3,4,6,8,7,0,5]
-    end = [1,2,3,4,5,6,7,8,0]
+    start = [1,2,3,8,4,5,7,6,0]
+    end = [1,2,3,8,0,4,7,6,5]
     Tracklist = []
     a = Solution(start,end)
     if(a.Resolvable(start,end)):
-        iternum,cost,Tracklist,root = a.Astar(a.Manhattan)
+        iternum,cost,Tracklist,root,expandNum = a.Astar(a.Manhattan)
         print('A* Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
+        # iternum,cost,Tracklist,root=a.Greedy()
+        # print('Greedy Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
+        # iternum,cost,Tracklist,root,=a.BFS(Display= True)
+        # print('BFS Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
+        # iternum,cost,Tracklist,root=a.DFS()
+        # print('DFS Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
         a.Display(root)
     else:
         print('no solution')
     return
-
+    
+    
 if __name__ == '__main__':
     main()
+
+
+# def test():
+#     start = [1,2,3,4,5,6,7,8,0]
+#     end = [8,7,6,5,4,3,2,1,0]
+#     a = Solution(start,end)
+#     start = a.Reflct(start)
+#     end = a.Reflct(end)
+#     print(a.heuristic(start,end,a.Manhattan))
+#     return
+# test()

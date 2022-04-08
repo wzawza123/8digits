@@ -1,7 +1,7 @@
 '''
 Description: use the bfs to solve the 8 puzzle problem
 Date: 2022-04-04 18:55:34
-LastEditTime: 2022-04-05 15:12:51
+LastEditTime: 2022-04-08 11:17:28
 '''
 import random
 import queue
@@ -169,6 +169,30 @@ def bfs_travel(root):
         print(node.get_state(),node.get_step())
         for child in node.get_children():
             q.put(child)
+
+def tree_visualization(root,end_state):
+    bfs_travel(root)
+    searching_tree=Tree(root,50,50)
+    searching_tree.init_leaf_list()
+    searching_tree.generate_node_position()
+    searching_tree.generate_critical(end_state)
+    #init pygame window
+    pygame.init()
+    screen=pygame.display.set_mode((1280,840))
+    pygame.display.set_caption("8 puzzle searching tree")
+    isRunning=True
+    #main loop
+    while isRunning:
+        #process the events
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                isRunning=False
+        #draw the background
+        screen.fill((64,64,64))
+        searching_tree.draw_tree(screen)
+        # root.display(screen)
+        pygame.display.update()
+    pygame.quit()
 
 def main():
     start_state=[1,2,3,7,4,6,0,5,8]

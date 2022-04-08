@@ -1,4 +1,5 @@
-from Searching_new import *
+from cmath import exp
+from Searching_expanded import *
 from visualization import *
 
 #input number list
@@ -15,12 +16,12 @@ def visualization_main():
     end_states = [1,2,3,4,5,6,7,8,0]
     
     # input states
-    start_states=input_number_list(prompt="Input initial states: ")
-    end_states=input_number_list(prompt="Input end states: ")
-    print("start with")
-    print(start_states)
-    print("end with")
-    print(end_states)
+    # start_states=input_number_list(prompt="Input initial states: ")
+    # end_states=input_number_list(prompt="Input end states: ")
+    # print("start with")
+    # print(start_states)
+    # print("end with")
+    # print(end_states)
     #init pygame window
     pygame.init()
     screen = pygame.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT))
@@ -45,12 +46,14 @@ def visualization_main():
     algorithm_selection_button_list.append(Button(BUTTON_2_X,BUTTON_2_Y,BUTTON_WIDTH,BUTTON_HEIGHT,"GREEDY",UNSELECTED_COLOR))
     selectedAlgorithm="A*"
     #init the text view
-    text_view=TextView(TEXT_VIEW_X,TEXT_VIEW_Y,"total iterations:Nan,total steps:Nan,time consumed:Nan",15)
+    text_view=TextView(TEXT_VIEW_X,TEXT_VIEW_Y,"total generated:Nan,total expanded:Nan,total steps:Nan,time consumed:Nan",15)
     #some flag definitions
     isSolving=False
     stepCnt=0
     totStep=0
     answer_list=[]
+    root=TreeNode(current_states,None)
+    expand_cnt=0
     fpsclock=pygame.time.Clock()
     #game loop
     running = True
@@ -75,20 +78,20 @@ def visualization_main():
                             # solClass.Astar(start_states,end_states)
                             #choose algorithm to solve the game
                             if selectedAlgorithm=="BFS":
-                                iternum,cost,answer_list=solClass.BFS()
+                                iternum,cost,answer_list,root,expand_cnt=solClass.BFS()
                             elif selectedAlgorithm=="DFS":
-                                iternum,cost,answer_list=solClass.DFS()
+                                iternum,cost,answer_list,root,expand_cnt=solClass.DFS()
                             elif selectedAlgorithm=="A*":
-                                iternum,cost,answer_list=solClass.Astar()
+                                iternum,cost,answer_list,root,expand_cnt=solClass.Astar(solClass.Manhattan)
                             elif selectedAlgorithm=="GREEDY":
-                                iternum,cost,answer_list=solClass.Greedy()
+                                iternum,cost,answer_list,root,expand_cnt=solClass.Greedy()
                             totStep=len(answer_list)
                             if totStep==0:
                                 button.setText("no solution")
                                 isSolving=False
                             else:
                                 button.setText("solving")
-                            text_view.setText("total iterations:{},total steps:{},time consumed:{:.1f}".format(iternum,totStep,cost))
+                            text_view.setText("total generated:{},total expanded:{},total steps:{},time consumed:{:.1f}".format(iternum,expand_cnt,totStep,cost))
                         if button.getText() == "reset":
                             if isSolving:
                                 isSolving=False
@@ -115,7 +118,7 @@ def visualization_main():
                 control_button_list[0].setText("solve")
         #draw background
         screen.fill(BOARD_BG_COLOR)
-        pygame.draw.rect(screen,RIGHT_BG_CLOOR, (MIDDLE_EDGE,0,640-MIDDLE_EDGE,WINDOW_HEIGHT))
+        pygame.draw.rect(screen,RIGHT_BG_CLOOR, (MIDDLE_EDGE,0,WINDOW_WIDTH-MIDDLE_EDGE,WINDOW_HEIGHT))
         #draw board
         board.display(screen)
         #draw buttons
