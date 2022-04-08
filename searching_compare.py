@@ -213,9 +213,9 @@ def generate_profile_data(test_times=300,algorithm="a_star_network"):
 def fixed_end_compare(test_times=300):
     #compare the performance of different algorithms
     # testing bfs
-    data_list=bfs_testing(test_times)
+    # data_list=bfs_testing(test_times)
     #testing a*_manhattan
-    # a_star_manhattan_testing(test_times)
+    data_list=a_star_manhattan_testing(test_times)
     # cProfile.run("a_star_network_testing(1)",filename="a_star_network_testing.txt")
     # data_list=a_star_network_testing(test_times)
     # data_list=greedy_testing(test_times)

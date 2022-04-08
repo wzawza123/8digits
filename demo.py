@@ -14,12 +14,12 @@ doneSearching=False
 #main function
 def visualization_main():
     #init states
-    start_states = [0,1,2,3,4,5,6,7,8]
-    end_states = [0,8,7,6,5,4,3,2,1]
+    start_states = [1,2,3,4,5,6,7,8,0]
+    end_states = [8,7,6,5,4,3,2,1,0]
     
     # input states
-    start_states=input_number_list(prompt="Input initial states: ")
-    end_states=input_number_list(prompt="Input end states: ")
+    start_states=input_number_list(prompt="Input initial states(like:1 2 3 4 5 6 7 8 0): ")
+    end_states=input_number_list(prompt="Input end states(like:8 7 6 5 4 3 2 1 0): ")
     print("start with")
     print(start_states)
     print("end with")

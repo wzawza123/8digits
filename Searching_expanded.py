@@ -6,6 +6,7 @@ import time
 from searching_tree import Tree, TreeNode
 from visualization import *
 import os
+import cProfile
 
 class Solution:
     #空状态
@@ -528,27 +529,28 @@ class Solution:
 
 
 def main():
-    start = [1,2,3,8,4,5,7,6,0]
-    end = [1,2,3,8,0,4,7,6,5]
+    start = [0,1,2,3,4,5,6,7,8]
+    end = [8,7,6,5,4,3,2,1,0]
     Tracklist = []
     a = Solution(start,end)
     if(a.Resolvable(start,end)):
-        iternum,cost,Tracklist,root,expandNum = a.Astar(a.Manhattan)
-        print('A* Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
+        # iternum,cost,Tracklist,root,expandNum = a.Astar(a.Manhattan)
+        # print('A* Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
         # iternum,cost,Tracklist,root=a.Greedy()
         # print('Greedy Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
-        # iternum,cost,Tracklist,root,=a.BFS(Display= True)
-        # print('BFS Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
+        iternum,cost,Tracklist,root,num=a.BFS(Display= True)
+        print('BFS Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
         # iternum,cost,Tracklist,root=a.DFS()
         # print('DFS Alrithmetic\niteration:%i \ntime cost:%05f' %(iternum,cost))
-        a.Display(root)
+        # a.Display(root)
     else:
         print('no solution')
     return
     
     
 if __name__ == '__main__':
-    main()
+    # main()
+    cProfile.run('main()')
 
 
 # def test():
